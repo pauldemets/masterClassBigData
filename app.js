@@ -39,6 +39,13 @@ app.get('/api/restaurants_price_average', async (req, res) => {
     })
 });
 
+app.get('/api/restaurants', async (req, res) => {
+    res.status(200).send({
+        success: 'true',
+        response: await db.findRestaurantsWithLocation(req.query.long_coordinates, req.query.lat_coordinates, req.query.max_distance)
+    })
+});
+
 app.get('/api/restaurants/average_rating', async (req, res) => {
     res.status(200).send({
         success: 'true',

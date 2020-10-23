@@ -83,9 +83,37 @@ async function deleteRestaurant(restaurant_id) {
     }
 }
 
-async function getProximityRestaurant() {
+async function findRestaurantsWithLocation(long_coordinates, lat_coordinates, max_distance) {
+    try {
+        console.log(long_coordinates);
+        await client.db("masterclass_project").collection("restaurants").createIndex({ "location": "2dsphere" });
 
+        result = await client.db("masterclass_project").collection("restaurants")
+            .find({
+                location: {
+                    $near: {
+                        $geometry: {
+                            type: "Point",
+                            coordinates: [parseFloat(long_coordinates), parseFloat(lat_coordinates)]
+                        },
+                        $maxDistance: parseInt(max_distance),
+                        $minDistance: 0
+                    }
+                }
+            }).toArray();
+
+
+        if (result) {
+            return result;
+        } else {
+            return 'error...';
+        }
+    }
+    catch (e) {
+        return new Error(e);
+    }
 }
+
 
 async function getAverageRestaurantsPrice() {
     try {
@@ -145,4 +173,4 @@ async function main() {
 main().catch(console.error);
 
 
-module.exports = { getRestaurantById, createRestaurant, updateRestaurant, deleteRestaurant, getRestaurantRating, getAverageRestaurantsPrice };
+module.exports = { getRestaurantById, createRestaurant, updateRestaurant, deleteRestaurant, getRestaurantRating, getAverageRestaurantsPrice, findRestaurantsWithLocation };
