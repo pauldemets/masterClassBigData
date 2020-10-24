@@ -1,7 +1,5 @@
 ## Projet individuel : Réalisation d'une API REST en NodeJS avec une base de données MongoDB.
 
--------------------------------------
-
 #### Voici la liste des tâches à réaliser en mongoDB pour la création d'une base de données en local :
 
 - Création de la bdd → `use masterclass_project`
